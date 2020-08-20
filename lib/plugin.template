@@ -1,0 +1,38 @@
+import Vue from 'vue'
+import debounce from 'lodash.debounce'
+
+const clientWidthMixinState = {
+  clientWidth: document.documentElement.clientWidth,
+}
+
+window.addEventListener(
+  'resize',
+  debounce(() => {
+    clientWidthMixinState.clientWidth = document.documentElement.clientWidth
+  }, 60),
+)
+
+Vue.mixin({
+  data() {
+    return {
+      clientWidthMixinState,
+    }
+  },
+  computed: {
+    $clientWidth() {
+      return this.clientWidthMixinState.clientWidth
+    },
+    $isMobile() {
+      return this.$clientWidth < <%= options.tablet %>
+    },
+    $isTablet() {
+      return this.$clientWidth >= <%= options.tablet %> && this.$clientWidth < <%= options.desktop %>
+    },
+    $isDesktop() {
+      return this.$clientWidth >= <%= options.desktop %> && this.$clientWidth < <%= options.largeDesktop %>
+    },
+    $isLargeDesktop() {
+      return this.$clientWidth >= <%= options.largeDesktop %>
+    },
+  },
+})
